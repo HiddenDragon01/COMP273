@@ -1,0 +1,92 @@
+#                   Your program begins here.
+                    .data
+string:             .asciiz "CabbUlafadodafalUbbaC"  # this is the test string
+yespalind:           .asciiz "This string is a palindrome!"
+nopalind:            .asciiz "This string is not a palindrome!"
+                    
+                    .text
+
+                    .globl main
+                    
+main:
+                  la $a0, string                           # "main" program begins by getting pointer
+                  jal length
+                  
+                  
+                  jal palind
+                  
+                  
+                  beq $v1, $0, nomessage
+                  
+                  j yesmessage
+                  
+                  
+                  
+                  
+
+
+
+                   
+length:                                                    # first line of "length" subroutine
+ 
+
+
+loop1:
+		   lb $t0, 0($a0)
+		   addi $a0, $a0, 1
+		   addi $v1, $v1, 1
+		   bne $t0, $0, loop1
+		   
+		   addi $v1, $v1, -1
+		   addi $a0, $a0, -1
+		   
+
+                  jr $ra                                   # last line of "length"
+
+palind:                                                    # first line of "palind" subroutine
+
+		   la $a1, string
+		   
+loop2:
+		   la $t3, string
+		   add $t3, $t3, $v1
+		   lb $t0, 0($t3)
+		   lb $t1, 0($a1)
+		   bne $t0, $t1, no
+		   ble $t3, $a1, yes
+		   addi $t3, $t3, -1
+		   addi $a1, $a1, 1
+		   j loop2
+		   
+		   
+		   
+no:
+		   move $v1, $zero
+                  jr $ra
+          
+yes:
+
+	          move $v1, $zero
+	          addi $v1, $v1, 1
+                  jr $ra
+
+
+nomessage:
+
+	      li $v0, 4
+	      la $a0, nopalind
+	      syscall
+	      
+	      la $v0, 10                               # Exit program
+             syscall
+
+
+yesmessage:
+
+	      li $v0, 4
+	      la $a0, yespalind
+	      syscall
+	      
+	      la $v0, 10                               # Exit program
+              syscall
+
